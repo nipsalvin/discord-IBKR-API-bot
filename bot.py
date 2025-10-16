@@ -2,6 +2,7 @@ import traceback
 import discord
 from discord.ext import commands
 import config
+from signal_parser import SignalParser
 
 # Initialize bot with message content intent
 intents = discord.Intents.default()
@@ -46,13 +47,38 @@ async def on_message(message):
     print(f'📨 Signal received from {message.author.name}:')
     print(f'   Content: {message.content}')
     print(f'   Timestamp: {message.created_at}\n')
-    
+
     # Acknowledge receipt (for testing)
     await message.add_reaction('👀')
-    
-    # TODO: Parse trading signal (Phase 2)
-    # TODO: Execute trade on IBKR (Phase 3)
-    
+
+    # Phase 2: Parse trading signal
+    signal = SignalParser.parse(message.content)
+
+    if signal:
+        # Validate the signal
+        is_valid, error_msg = SignalParser.validate_signal(signal)
+
+        if is_valid:
+            print(f'✅ Signal parsed successfully:')
+            print(f'   Instrument: {signal.instrument}')
+            print(f'   Strike: {signal.strike}')
+            print(f'   Type: {signal.option_type}')
+            if signal.quantity:
+                print(f'   Quantity: {signal.quantity}')
+            if signal.action:
+                print(f'   Action: {signal.action}')
+            print(f'   Summary: {signal}\n')
+
+            # TODO: Execute trade on IBKR (Phase 3)
+        else:
+            print(f'❌ Signal validation failed: {error_msg}\n')
+            # This can be used for responding to the user
+            await message.reply(f'❌ Invalid signal: {error_msg}')
+    else:
+        print(f'⚠️  Could not parse trading signal from message\n')
+        # This can be used for responding to the user
+        await message.reply(f'❌ Could not parse trading signal from message')
+
     # Process commands (if any are added later)
     await bot.process_commands(message)
 
