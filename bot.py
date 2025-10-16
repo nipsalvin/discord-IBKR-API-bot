@@ -1,3 +1,4 @@
+import traceback
 import discord
 from discord.ext import commands
 import config
@@ -59,7 +60,6 @@ async def on_message(message):
 async def on_error(event, *args, **kwargs):
     """Handle errors gracefully"""
     print(f'❌ Error in {event}')
-    import traceback
     traceback.print_exc()
 
 # Run the bot
@@ -71,5 +71,4 @@ if __name__ == '__main__':
         print('\n⚠️  Bot stopped by user')
     except Exception as e:
         print(f'❌ Fatal error: {e}')
-        import traceback
         traceback.print_exc()
