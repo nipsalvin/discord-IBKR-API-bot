@@ -6,6 +6,8 @@ async-timeout==5.0.1
 attrs==25.3.0
 backcall==0.2.0
 backports.zoneinfo==0.2.1
+certifi==2026.1.4
+charset-normalizer==3.4.4
 decorator==5.2.1
 discord-py==2.6.4
 eventkit==1.0.3
@@ -29,9 +31,11 @@ ptyprocess==0.7.0
 pure-eval==0.2.3
 pygments==2.19.2
 python-dotenv==1.0.1
+requests==2.32.4
 stack-data==0.6.3
 tomli==2.3.0
 traitlets==5.14.3
 typing-extensions==4.13.2
+urllib3==2.2.3
 wcwidth==0.2.14
 yarl==1.15.2
