@@ -11,7 +11,7 @@ BRIDGE_USER_ID = int(os.getenv('TEST_USER_ID')) # pyright: ignore[reportArgument
 
 # IBKR Configuration (for later phases)
 IBKR_HOST = os.getenv('IBKR_HOST', '127.0.0.1')
-IBKR_PORT = os.getenv('IBKR_PORT', '4002')
+IBKR_PORT = os.getenv('IBKR_PORT', '7497')
 IBKR_CLIENT_ID = os.getenv('IBKR_CLIENT_ID', '1')
 
 # Validate required environment variables

@@ -66,10 +66,22 @@ Expected output:
 
 ## Running Tests
 
-### Run All Tests
+### Run Signal Parser Tests
 
 ```bash
 python -m unittest test_signal_parser -v
+```
+
+### Run IBKR API Tests
+
+```bash
+python -m unittest test_ibkr_api -v
+```
+
+### Run All Tests
+
+```bash
+python -m unittest discover -v
 ```
 
 ### Run Specific Test
@@ -114,17 +126,85 @@ OK
 
 ```
 discord-IBKR-API-bot/
-├── bot.py                    # Main Discord bot
-├── config.py                 # Configuration management
-├── signal_parser.py          # Phase 2: Signal parsing logic
-├── test_signal_parser.py     # Unit tests for signal parser
-├── requirements.txt          # Python dependencies
-├── .env                      # Environment variables (not in repo)
-├── .gitignore               # Git ignore rules
-├── README.md                # Project documentation
-├── SETUP.md                 # This file
-└── venv/                    # Virtual environment
+├── bot.py                      # Main Discord bot
+├── config.py                   # Configuration management
+├── signal_parser.py            # Phase 2: Signal parsing logic
+├── test_signal_parser.py       # Unit tests for signal parser (11 tests)
+├── ibkr_api.py                # Phase 3: IBKR connection & trade execution
+├── test_ibkr_api.py           # Unit tests for IBKR API (19 tests)
+├── example_ibkr_usage.py      # Example usage of IBKR API
+├── requirements.txt            # Python dependencies
+├── .env                        # Environment variables (not in repo)
+├── .gitignore                 # Git ignore rules
+├── README.md                  # Project documentation
+├── SETUP.md                   # This file
+└── venv/                      # Virtual environment
 ```
+
+## IBKR API Module
+
+The IBKR API module provides classes for connecting to Interactive Brokers using **ib_insync** and executing trades:
+
+### Key Classes
+
+- **IBKRConnection**: Manages connection to IBKR Gateway/TWS
+  - `connect()` - Connect to IBKR Gateway/TWS
+  - `disconnect()` - Disconnect gracefully
+  - `place_order(order)` - Place a trade order
+  - `cancel_order(order_id)` - Cancel an order
+  - `get_account_summary()` - Get account information
+  - `is_ready()` - Check connection status
+
+- **IBKROrder**: Represents a trade order
+  - Supports market, limit, stop, and stop-limit orders
+  - Configurable quantity, price, and action (BUY/SELL)
+
+- **IBKRTradeExecutor**: High-level interface for executing trades from signals
+  - Converts TradingSignal objects to IBKR orders
+  - Handles order placement and error handling
+
+### Requirements
+
+- IBKR Gateway or TWS running on `127.0.0.1:7497` (configurable)
+- `ib_insync` library (already in requirements.txt)
+
+### Example Usage
+
+```python
+from ibkr_api import IBKRConnection, IBKROrder, OrderAction, OrderType
+from ib_insync import Stock
+
+# Create connection
+conn = IBKRConnection()
+success, msg = conn.connect()
+
+if success:
+    # Get market data
+    contract = Stock('SPY', 'SMART', 'USD')
+    ticker = conn.ib.reqMktData(contract)
+    conn.ib.sleep(2)
+    print(f"SPY Bid: {ticker.bid}")
+
+    # Place a market order
+    order = IBKROrder(
+        symbol="SPY",
+        quantity=100,
+        action=OrderAction.BUY,
+        order_type=OrderType.MARKET
+    )
+    success, msg, order_id = conn.place_order(order)
+
+    # Disconnect
+    conn.disconnect()
+```
+
+### Running Examples
+
+See `example_ibkr_usage.py` for complete examples of:
+- Connecting and getting market data
+- Placing market orders
+- Placing limit orders
+- Getting account summary
 
 ## Signal Parser Examples
 
