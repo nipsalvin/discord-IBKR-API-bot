@@ -40,7 +40,7 @@ def example_connect_and_get_market_data():
         # Disconnect
         conn.disconnect()
     
-    print()
+    print(f'Order is: {ticker} {ticker.last}')
 
 
 def example_place_market_order():

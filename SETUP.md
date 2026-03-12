@@ -130,15 +130,15 @@ discord-IBKR-API-bot/
 ├── config.py                   # Configuration management
 ├── signal_parser.py            # Phase 2: Signal parsing logic
 ├── test_signal_parser.py       # Unit tests for signal parser (11 tests)
-├── ibkr_api.py                # Phase 3: IBKR connection & trade execution
-├── test_ibkr_api.py           # Unit tests for IBKR API (19 tests)
-├── example_ibkr_usage.py      # Example usage of IBKR API
+├── ibkr_api.py                 # Phase 3: IBKR connection & trade execution
+├── test_ibkr_api.py            # Unit tests for IBKR API (19 tests)
+├── example_ibkr_usage.py       # Example usage of IBKR API
 ├── requirements.txt            # Python dependencies
 ├── .env                        # Environment variables (not in repo)
-├── .gitignore                 # Git ignore rules
-├── README.md                  # Project documentation
-├── SETUP.md                   # This file
-└── venv/                      # Virtual environment
+├── .gitignore                  # Git ignore rules
+├── README.md                   # Project documentation
+├── SETUP.md                    # This file
+└── venv/                       # Virtual environment
 ```
 
 ## IBKR API Module
