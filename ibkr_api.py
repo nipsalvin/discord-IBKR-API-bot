@@ -117,7 +117,7 @@ class IBKRConnection:
             # TODO: Implement actual order placement using ibapi
             # This should:
             # 1. Create a contract object
-            # 2. Create an order objectTesting market data req
+            # 2. Create an order object
             # 3. Place the order via EClient
             # 4. Return the order ID
             

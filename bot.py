@@ -3,6 +3,7 @@ import discord
 from discord.ext import commands
 import config
 from signal_parser import SignalParser
+from ibkr_api import IBKRConnection, IBKRTradeExecutor, IBKROrder, OrderAction, OrderType
 
 # Initialize bot with message content intent
 intents = discord.Intents.default()
@@ -70,6 +71,25 @@ async def on_message(message):
             print(f'   Summary: {signal}\n')
 
             # TODO: Execute trade on IBKR (Phase 3)
+            try:
+                print(f'\n 🚀 Attempting to execute trade on IBKR for signal: {signal}')
+                conn = IBKRConnection()
+                conn.connect()
+
+                new_order = IBKROrder(
+                    symbol=signal.instrument,
+                    quantity=signal.quantity or 0,
+                    action=OrderAction.BUY if signal.action == 'BUY' else OrderAction.SELL,
+                    order_type=OrderType.MARKET
+                )
+                print(f'🚀 Executing trade on IBKR: {new_order}')
+
+                conn.place_order(new_order)
+                conn.disconnect()
+            except Exception as e:
+                print(f'❌ Error executing trade: {e}')
+                traceback.print_exc()
+                await message.reply(f'❌ Error executing trade: {str(e)}')
         else:
             print(f'❌ Signal validation failed: {error_msg}\n')
             # This can be used for responding to the user
